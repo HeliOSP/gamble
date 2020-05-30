@@ -13,5 +13,5 @@ docker-compose stop
 docker-compose build
 docker-compose up -d
 
-docker exec -it $containerName /bin/sh
+docker exec -it -u $(id -u ${USER}):$(id -g ${USER}) $containerName /bin/sh
 docker-compose stop
