@@ -1,0 +1,47 @@
+<div class="round-players">
+    <a id="round_players_link" href="#">round players</a>
+</div>
+<div class="round-players-table popup">
+    <div class="close">
+        <a href="#">close X</a>
+    </div>
+    <table>
+        <thead>
+            <th>Round Id</th>
+            <th>Players Count</th>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+<script type="text/xml" id="round_players_table_row">
+    <tr>
+        <td>%roundId%</td>
+        <td>%playersCount%</td>
+    </tr>
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const wrapper = $('.round-players-table');
+        const link = $('#round_players_link');
+        const table = wrapper.find('table');
+        const rowTemplate = $('#round_players_table_row')[0].innerHTML;
+        link.on('click', () => {
+            $.ajax(
+                {
+                    url: '{{ path('misc_round_players') }}',
+                    success: data => {
+                        table.find('tbody').html('');
+                        data.roundPlayers.map(round => {
+                            table.find('tbody').append($(rowTemplate.replace('%roundId%', round.id)
+                                .replace('%playersCount%', round.user_count)))
+                        })
+                        wrapper.show();
+                    }
+                }
+            )
+        })
+        wrapper.find('.close a').on('click', () => wrapper.hide())
+    })
+</script>

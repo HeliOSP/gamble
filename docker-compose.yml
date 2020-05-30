@@ -1,0 +1,35 @@
+version: "3.2"
+
+services:
+  php:
+    build: ./docker/php/
+    container_name: gamble-app
+    networks:
+      - backend
+    volumes:
+      - ./:/var/www/html/
+  apache:
+    build: ./docker/apache
+    networks:
+      - backend
+      - frontend
+    volumes:
+      - ./:/var/www/html/
+    ports:
+      - "8080:80"
+    depends_on:
+      - php
+      - mysql
+  mysql:
+    image: mysql:5.6.40
+    volumes:
+      - ./docker/mysql/:/var/lib/mysql
+    ports:
+      - "3335:3306"
+    networks:
+      - backend
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+networks:
+  backend:
+  frontend:

@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block body_left %}
+    <ul class="round-list">
+        {% for round in currentRounds %}
+            <li class="round-list--item">
+                <a href="{{ path('round', {'roundId': round.id}) }}">
+                    Round {{ round.id }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+    <div>
+        <a href="{{ path('round_new') }}">Add new Round</a>
+    </div>
+{% endblock %}
+{% block body_right %}
+    {% include 'misc/active_players.html.twig' %}
+    {% include 'misc/round_players.html.twig' %}
+{% endblock %}

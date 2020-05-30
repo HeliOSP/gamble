@@ -1,0 +1,50 @@
+<div class="active-players">
+    <a id="active_players_link" href="#">active players</a>
+</div>
+<div class="active-players-table popup">
+    <div class="close">
+        <a href="#">close X</a>
+    </div>
+    <table>
+        <thead>
+            <th>User Id</th>
+            <th>Round Played</th>
+            <th>Average Spin Count</th>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+<script type="text/xml" id="active_players_table_row">
+    <tr>
+        <td>%userId%</td>
+        <td>%roundsCount%</td>
+        <td>%avgSpins%</td>
+    </tr>
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const wrapper = $('.active-players-table');
+        const link = $('#active_players_link');
+        const table = wrapper.find('table');
+        const rowTemplate = $('#active_players_table_row')[0].innerHTML;
+        link.on('click', () => {
+            $.ajax(
+                {
+                    url: '{{ path('misc_active_players') }}',
+                    success: data => {
+                        table.find('tbody').html('');
+                        data.activePlayers.map(player => {
+                            table.find('tbody').append($(rowTemplate.replace('%userId%', player.id)
+                                .replace('%roundsCount%', player.r_count)
+                                .replace('%avgSpins%', player.avg_spin_count)))
+                        })
+                        wrapper.show();
+                    }
+                }
+            )
+        })
+        wrapper.find('.close a').on('click', () => wrapper.hide())
+    })
+</script>

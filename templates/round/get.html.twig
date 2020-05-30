@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+{% block body_left %}
+    <p>Users</p>
+    <ul>
+        {% for user in round.users %}
+            {{ user.name }}
+        {% endfor %}
+    </ul>
+{% endblock %}
+{% block body_right %}
+    <h2 class="title">Round {{ round.id }}</h2>
+    <div class="round-cells">
+        {% for cell in round.currentStateArray %}
+            {% if cell.value %}
+            <div class="round-cells--cell cell cell_{{ cell.key}} {% if cell.used %}used{% endif %}">
+                <div class="cell--number">{{ cell.key + 1 }}</div>
+                <div class="cell--value">{{ cell.value }}</div>
+            </div>
+            {% endif %}
+        {% endfor %}
+        {% set jacpotCell = round.currentStateArray[round.currentStateArray|length - 1] %}
+        <div class="round-cells--cell cell cell_{{ jacpotCell.key}} jackpot {% if jacpotCell.used %}used{% endif %}">
+            JACKPOT
+        </div>
+    </div>
+    <div class="actions">
+        {% if not round.finished %}
+        <button class="spin">SPIN</button>
+        {% endif %}
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const spinButton = document.getElementsByClassName('spin')[0];
+            const spinClick = spinButton.addEventListener('click', () => {
+                let request = new XMLHttpRequest();
+                request.responseType = 'json';
+                request.open('POST', '{{ path('roulette_spin') }}', true);
+                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                request.addEventListener("readystatechange", () => {
+                    if(request.readyState === 4 && request.status === 200) {
+                        if (request.response.error) {
+                            alert(request.response.error)
+                        } else {
+                            document.getElementsByClassName('cell_' + request.response.cell)[0].classList.add('used');
+                        }
+                        if (request.response.finished) {
+                            spinButton.removeEventListener('click', spinClick);
+                            spinButton.parentNode.removeChild(spinButton);
+                            alert('Round finished');
+                        }
+                    }
+                });
+                request.send(JSON.stringify({
+                    'roundId': {{ round.id }}
+                }));
+            })
+        })
+    </script>
+{% endblock %}

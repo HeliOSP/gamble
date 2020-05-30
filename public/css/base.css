@@ -1,0 +1,64 @@
+.container {
+    width: 960px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+.container--header {
+    width: 100%;
+    min-height: 50px;
+    background-color: #eee;
+    padding: 5px 0;
+}
+.container--left {
+    width: 250px;
+    padding-right: 5px;
+}
+.container--right {
+    flex-grow: 1;
+}
+.round-cells {
+    display: flex;
+    flex-wrap: wrap;
+    width: 540px;
+    margin: 0 auto;
+}
+.round-cells--cell {
+    width: 50px;
+    height: 50px;
+    margin: 2px;
+    text-align: center;
+    background-color: rgba(0, 255, 0, 0.1);
+}
+.round-cells--cell.used {
+    background-color: rgba(266, 0, 0, 0.1);
+}
+.round-cells--cell.jackpot {
+    width: calc(100% - 4px);
+    background-color: gold;
+    color: #fff;
+    line-height: 50px;
+}
+.round-cells--cell.jackpot.used {
+    border: solid 1px red;
+    width: calc(100% - 6px);
+}
+.title {
+    text-align: center;
+}
+.popup {
+    position: absolute;
+    width: 500px;
+    height: 300px;
+    left: calc(50% - 250px);
+    top: calc(50% - 150px);
+    overflow: hidden;
+    overflow-y: auto;
+    background-color: #FFF;
+    border: 1px solid #eee;
+    display: none;
+}
+.active-players-table table {
+    width: 300px;
+    margin: 0 auto;
+}
